@@ -1,0 +1,14 @@
+name = "platform-ops-connector"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+[vars]
+ENVIRONMENT = "production"
+# Not secret — your Cloudflare Account ID is safe as a plain variable.
+# Replace with your real Account ID before deploying.
+CLOUDFLARE_ACCOUNT_ID = "e96866e6a4c5a8a15b8c4ab8615ee028"
+
+# Both of these ARE secrets — set them after first deploy with:
+#   wrangler secret put GITHUB_TOKEN
+#   wrangler secret put CLOUDFLARE_API_TOKEN
+# Never put them in this file or commit them to the repo.
