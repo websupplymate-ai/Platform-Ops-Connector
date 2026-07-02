@@ -58,7 +58,15 @@ async function cloudflareFetch(path, token, method = "GET", body) {
 }
 
 async function getRepos(env) {
-  const repos = await githubFetch(`/orgs/${GITHUB_ORG}/repos?per_page=50`, env.GITHUB_TOKEN);
+  // websupplymate-ai might be a GitHub Organization or a personal account —
+  // these use different API endpoints. Try org first, fall back to user.
+  let repos;
+  try {
+    repos = await githubFetch(`/orgs/${GITHUB_ORG}/repos?per_page=50`, env.GITHUB_TOKEN);
+  } catch (err) {
+    if (!String(err.message).includes("404")) throw err;
+    repos = await githubFetch(`/users/${GITHUB_ORG}/repos?per_page=50`, env.GITHUB_TOKEN);
+  }
   const withCommits = await Promise.all(
     repos.map(async (r) => {
       let latestCommit = null;
